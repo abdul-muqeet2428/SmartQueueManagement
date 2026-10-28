@@ -1,0 +1,563 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Track Your Token — G. Pulla Reddy Food Court</title>
+  <meta name="description" content="Live digital token tracker for G. Pulla Reddy Food Court. Real-time kitchen updates, counter pickup notifications, and simulated audio chime.">
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  
+  <link rel="stylesheet" href="style.css">
+  <style>
+    .token-page {
+      min-height: 100vh;
+      padding: 7.5rem 1.5rem 4rem 1.5rem;
+      position: relative;
+      z-index: 2;
+    }
+
+    .token-container {
+      max-width: 820px;
+      margin: 0 auto;
+    }
+
+    .tracker-card {
+      background: rgba(16, 22, 19, 0.85);
+      border: 1.5px solid rgba(255, 209, 102, 0.28);
+      border-radius: 24px;
+      padding: 3rem 2.5rem;
+      box-shadow: 0 30px 70px rgba(0, 0, 0, 0.85), 0 0 40px rgba(11, 93, 70, 0.35);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      position: relative;
+      margin-bottom: 2rem;
+    }
+
+    .token-header-banner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 1.5rem;
+      padding-bottom: 2rem;
+      border-bottom: 1px solid rgba(255, 209, 102, 0.15);
+      margin-bottom: 2.5rem;
+    }
+
+    .token-hero-badge {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .token-hero-badge .token-sub {
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--color-gold);
+      font-weight: 700;
+    }
+
+    .token-number-display {
+      font-family: var(--font-heading);
+      font-size: 3rem;
+      font-weight: 800;
+      color: #FFFFFF;
+      line-height: 1.1;
+      text-shadow: 0 0 25px rgba(255, 209, 102, 0.4);
+    }
+
+    .token-status-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.6rem;
+      background: rgba(11, 93, 70, 0.4);
+      border: 1.5px solid #22C55E;
+      color: #4ADE80;
+      padding: 0.6rem 1.25rem;
+      border-radius: 999px;
+      font-weight: 700;
+      font-size: 0.95rem;
+      box-shadow: 0 0 20px rgba(34, 197, 94, 0.3);
+      animation: borderGlow 2s infinite alternate;
+    }
+
+    /* Stepper Progression */
+    .stepper-container {
+      position: relative;
+      margin-bottom: 3rem;
+    }
+
+    .stepper-bar-bg {
+      position: absolute;
+      top: 24px;
+      left: 30px;
+      right: 30px;
+      height: 4px;
+      background: rgba(255, 255, 255, 0.1);
+      z-index: 1;
+    }
+
+    .stepper-bar-fill {
+      position: absolute;
+      top: 24px;
+      left: 30px;
+      width: 66%;
+      height: 4px;
+      background: linear-gradient(90deg, #22C55E 0%, var(--color-gold) 100%);
+      box-shadow: 0 0 10px var(--color-gold);
+      z-index: 2;
+      transition: width 0.6s ease;
+    }
+
+    .stepper-steps {
+      display: flex;
+      justify-content: space-between;
+      position: relative;
+      z-index: 3;
+    }
+
+    .step-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      max-width: 130px;
+    }
+
+    .step-circle {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      background: #101613;
+      border: 2px solid rgba(255, 209, 102, 0.25);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.2rem;
+      margin-bottom: 0.75rem;
+      transition: all var(--transition-smooth);
+    }
+
+    .step-item.completed .step-circle {
+      background: #0B5D46;
+      border-color: #22C55E;
+      color: #22C55E;
+      box-shadow: 0 0 15px rgba(34, 197, 94, 0.4);
+    }
+
+    .step-item.active .step-circle {
+      background: linear-gradient(135deg, var(--color-forest) 0%, var(--color-orange) 100%);
+      border-color: var(--color-gold);
+      color: #FFFFFF;
+      box-shadow: 0 0 20px rgba(255, 122, 24, 0.5);
+      animation: pulseLight 2s infinite;
+    }
+
+    .step-label {
+      font-size: 0.82rem;
+      font-weight: 700;
+      color: var(--color-cream);
+      margin-bottom: 0.2rem;
+    }
+
+    .step-time {
+      font-size: 0.72rem;
+      color: var(--color-cream-muted);
+    }
+
+    /* Live Estimation Widget */
+    .estimation-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.5rem;
+      margin-bottom: 2.5rem;
+    }
+
+    .est-box {
+      background: rgba(10, 15, 13, 0.7);
+      border: 1px solid rgba(255, 209, 102, 0.16);
+      border-radius: 16px;
+      padding: 1.4rem;
+    }
+
+    .est-box-header {
+      font-size: 0.78rem;
+      font-weight: 700;
+      color: var(--color-gold);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 0.4rem;
+    }
+
+    .est-value {
+      font-family: var(--font-heading);
+      font-size: 1.6rem;
+      font-weight: 800;
+      color: #FFFFFF;
+    }
+
+    .est-subtext {
+      font-size: 0.8rem;
+      color: var(--color-cream-muted);
+      margin-top: 0.2rem;
+    }
+
+    /* Order Summary Details */
+    .order-items-box {
+      background: rgba(10, 15, 13, 0.5);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 16px;
+      padding: 1.5rem;
+      margin-bottom: 2rem;
+    }
+
+    .order-items-box h4 {
+      font-family: var(--font-heading);
+      font-size: 1rem;
+      color: var(--color-gold);
+      margin-bottom: 1rem;
+      padding-bottom: 0.5rem;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .order-item-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0.5rem 0;
+      font-size: 0.9rem;
+      color: var(--color-cream);
+    }
+
+    .order-item-row:not(:last-child) {
+      border-bottom: 1px dashed rgba(255, 255, 255, 0.06);
+    }
+
+    /* Actions Bar */
+    .tracker-actions {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+
+    .chime-btn {
+      background: linear-gradient(135deg, rgba(255, 122, 24, 0.25) 0%, rgba(255, 209, 102, 0.2) 100%);
+      border: 1.5px solid var(--color-gold);
+      color: var(--color-gold);
+      padding: 0.75rem 1.4rem;
+      border-radius: 999px;
+      font-weight: 700;
+      font-size: 0.9rem;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      transition: all var(--transition-fast);
+    }
+
+    .chime-btn:hover {
+      background: var(--color-gold);
+      color: #101613;
+      transform: scale(1.03);
+      box-shadow: 0 0 20px rgba(255, 209, 102, 0.4);
+    }
+
+    /* Query Another Token Card */
+    .query-card {
+      background: rgba(16, 22, 19, 0.6);
+      border: 1px solid rgba(255, 209, 102, 0.15);
+      border-radius: 18px;
+      padding: 1.8rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 1.5rem;
+    }
+
+    @media (max-width: 640px) {
+      .tracker-card {
+        padding: 1.8rem 1.2rem;
+      }
+      .token-header-banner {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+      .token-number-display {
+        font-size: 2.4rem;
+      }
+      .estimation-grid {
+        grid-template-columns: 1fr;
+      }
+      .stepper-steps {
+        flex-direction: column;
+        gap: 1.5rem;
+        align-items: flex-start;
+        padding-left: 20px;
+      }
+      .stepper-bar-bg, .stepper-bar-fill {
+        display: none;
+      }
+      .step-item {
+        flex-direction: row;
+        gap: 1rem;
+        text-align: left;
+        max-width: none;
+      }
+      .step-circle {
+        margin-bottom: 0;
+        flex-shrink: 0;
+      }
+      .query-card {
+        flex-direction: column;
+        align-items: stretch;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Ambient Background Glow -->
+  <div class="ambient-glow glow-top-left" aria-hidden="true"></div>
+  <div class="ambient-glow glow-center-right" aria-hidden="true"></div>
+
+  <!-- Navbar -->
+  <header class="navbar" id="navbar">
+    <div class="nav-container">
+      <a href="index.html" class="brand-logo" aria-label="G. Pulla Reddy Food Court Home">
+        <div class="logo-crest">
+          <svg class="crest-icon" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="20" cy="20" r="18" stroke="#FFD166" stroke-width="2" stroke-dasharray="4 2"/>
+            <path d="M12 24C12 20 15.58 17 20 17C24.42 17 28 20 28 24C28 26.2 24.42 27 20 27C15.58 27 12 26.2 12 24Z" fill="#FF7A18"/>
+            <circle cx="20" cy="8" r="2" fill="#FFD166"/>
+          </svg>
+        </div>
+        <div class="brand-text">
+          <span class="college-name">G. Pulla Reddy</span>
+          <span class="sub-name">Food Court <span class="badge-sqms">Token Tracker</span></span>
+        </div>
+      </a>
+
+      <div class="nav-actions">
+        <a href="index.html" class="btn btn-outline-gold" style="padding: 0.5rem 1.1rem; font-size: 0.85rem;">
+          ← Back to Food Court
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <main class="token-page">
+    <div class="token-container">
+      
+      <!-- Primary Tracker Card -->
+      <div class="tracker-card">
+        
+        <!-- Header Banner with Token Number -->
+        <div class="token-header-banner">
+          <div class="token-hero-badge">
+            <span class="token-sub">Campus Smart Queue Pass</span>
+            <div class="token-number-display" id="activeTokenId">#A-105</div>
+            <p style="font-size: 0.82rem; color: var(--color-cream-muted); margin-top: 0.2rem;">
+              Issued to: <strong>G. Akhil (Roll: 22GPR108)</strong> • Breakfast Rush
+            </p>
+          </div>
+          <div class="token-status-pill" id="tokenStatusBadge">
+            <span class="pulse-indicator"></span>
+            <span id="tokenStatusText">Cooking in Kitchen</span>
+          </div>
+        </div>
+
+        <!-- 4-Step Stepper Progress Bar -->
+        <div class="stepper-container">
+          <div class="stepper-bar-bg"></div>
+          <div class="stepper-bar-fill" id="stepperFill"></div>
+          
+          <div class="stepper-steps">
+            
+            <div class="step-item completed">
+              <div class="step-circle">✓</div>
+              <div class="step-label">Order Placed</div>
+              <div class="step-time">09:12 AM</div>
+            </div>
+
+            <div class="step-item active">
+              <div class="step-circle">🔥</div>
+              <div class="step-label">Cooking</div>
+              <div class="step-time">In Progress</div>
+            </div>
+
+            <div class="step-item">
+              <div class="step-circle">🔔</div>
+              <div class="step-label">Ready for Pickup</div>
+              <div class="step-time">Counter 1</div>
+            </div>
+
+            <div class="step-item">
+              <div class="step-circle">✨</div>
+              <div class="step-label">Collected</div>
+              <div class="step-time">Completed</div>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- Live Estimation Row -->
+        <div class="estimation-grid">
+          
+          <div class="est-box">
+            <div class="est-box-header">Estimated Ready Time</div>
+            <div class="est-value" id="countdownTimer">02:18</div>
+            <div class="est-subtext">Live countdown from kitchen master stove</div>
+          </div>
+
+          <div class="est-box">
+            <div class="est-box-header">Designated Collection Counter</div>
+            <div class="est-value" style="color: var(--color-gold);">Counter 1</div>
+            <div class="est-subtext">Main Dining Hall — Front Tiffin Section</div>
+          </div>
+
+        </div>
+
+        <!-- Order Items Breakdown -->
+        <div class="order-items-box">
+          <h4>Meal Items in This Token</h4>
+          <div class="order-item-row">
+            <span>1x Crispy Ghee Masala Dosa</span>
+            <span style="color: var(--color-gold); font-weight: 700;">₹45</span>
+          </div>
+          <div class="order-item-row">
+            <span>1x Kurnool Uggani & Mirchi Bajji</span>
+            <span style="color: var(--color-gold); font-weight: 700;">₹35</span>
+          </div>
+          <div class="order-item-row">
+            <span>1x Special Cutting Chai</span>
+            <span style="color: var(--color-gold); font-weight: 700;">₹12</span>
+          </div>
+          <div class="order-item-row" style="margin-top: 0.6rem; font-weight: 800; font-size: 1rem; color: #FFFFFF;">
+            <span>Total Paid (Simulated UPI)</span>
+            <span style="color: var(--color-orange);">₹92</span>
+          </div>
+        </div>
+
+        <!-- Tracker Actions -->
+        <div class="tracker-actions">
+          <button class="chime-btn" onclick="playCounterBell()">
+            <span>🔔 Test Pickup Bell Chime</span>
+          </button>
+          <button class="btn btn-primary" onclick="simulateCounterCall()">
+            <span>Simulate Kitchen "READY" Call ⚡</span>
+          </button>
+        </div>
+
+      </div>
+
+      <!-- Quick Switch / Look up other token -->
+      <div class="query-card">
+        <div>
+          <h4 style="font-family: var(--font-heading); color: #FFFFFF; margin-bottom: 0.2rem;">Track Another Token</h4>
+          <p style="font-size: 0.85rem; color: var(--color-cream-muted);">Check a friend's order or previous token number.</p>
+        </div>
+        <form style="display: flex; gap: 0.6rem;" onsubmit="switchToken(event)">
+          <input 
+            type="text" 
+            id="newTokenInput" 
+            placeholder="e.g. B-212" 
+            class="form-input" 
+            style="width: 140px; padding: 0.65rem 1rem;" 
+            required
+          >
+          <button type="submit" class="btn btn-outline-gold" style="padding: 0.65rem 1.2rem;">Search</button>
+        </form>
+      </div>
+
+    </div>
+  </main>
+
+  <script>
+    // URL param check
+    const urlParams = new URLSearchParams(window.location.search);
+    const tokenParam = urlParams.get('token');
+    if (tokenParam) {
+      document.getElementById('activeTokenId').textContent = '#' + tokenParam.toUpperCase();
+    }
+
+    // Live Countdown
+    let totalSeconds = 138;
+    const timerEl = document.getElementById('countdownTimer');
+    const timerInterval = setInterval(() => {
+      if (totalSeconds <= 0) {
+        clearInterval(timerInterval);
+        timerEl.textContent = 'READY!';
+        simulateCounterCall();
+        return;
+      }
+      totalSeconds--;
+      const mins = Math.floor(totalSeconds / 60);
+      const secs = totalSeconds % 60;
+      timerEl.textContent = `${String(mins).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
+    }, 1000);
+
+    // Synthetic Web Audio API Chime Bell (No external MP3 needed!)
+    function playCounterBell() {
+      try {
+        const AudioCtx = window.AudioContext || window.webkitAudioContext;
+        if (!AudioCtx) return;
+        const ctx = new AudioCtx();
+
+        const osc1 = ctx.createOscillator();
+        const osc2 = ctx.createOscillator();
+        const gain = ctx.createGain();
+
+        osc1.type = 'sine';
+        osc1.frequency.setValueAtTime(880, ctx.currentTime); // Note A5
+        osc1.frequency.exponentialRampToValueAtTime(1760, ctx.currentTime + 0.1);
+
+        osc2.type = 'triangle';
+        osc2.frequency.setValueAtTime(1320, ctx.currentTime); // Note E6
+
+        gain.gain.setValueAtTime(0.3, ctx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 1.2);
+
+        osc1.connect(gain);
+        osc2.connect(gain);
+        gain.connect(ctx.destination);
+
+        osc1.start();
+        osc2.start();
+        osc1.stop(ctx.currentTime + 1.2);
+        osc2.stop(ctx.currentTime + 1.2);
+      } catch (e) {
+        console.log('Audio not allowed or supported:', e);
+      }
+    }
+
+    function simulateCounterCall() {
+      playCounterBell();
+      document.getElementById('tokenStatusText').textContent = 'READY FOR PICKUP!';
+      document.getElementById('tokenStatusBadge').style.borderColor = '#22C55E';
+      document.getElementById('tokenStatusBadge').style.background = 'rgba(34, 197, 94, 0.4)';
+      document.getElementById('stepperFill').style.width = '100%';
+
+      const steps = document.querySelectorAll('.step-item');
+      steps.forEach(s => s.classList.add('completed'));
+      steps[2].classList.add('active');
+
+      alert('🔔 DING! Token #' + document.getElementById('activeTokenId').textContent + ' is called at Counter 1! Please pick up your fresh meal tray.');
+    }
+
+    function switchToken(e) {
+      e.preventDefault();
+      const num = document.getElementById('newTokenInput').value.trim().toUpperCase();
+      if (num) {
+        window.location.href = `token.html?token=${encodeURIComponent(num)}`;
+      }
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Student & Faculty Login — G. Pulla Reddy Food Court</title>
+  <meta name="description" content="Login to G. Pulla Reddy Food Court Smart Queue Management System. Order meals, track digital tokens, and skip the line.">
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  
+  <link rel="stylesheet" href="style.css">
+  <style>
+    .auth-page {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 6rem 1.5rem 3rem 1.5rem;
+      position: relative;
+      z-index: 2;
+    }
+
+    .auth-card {
+      width: 100%;
+      max-width: 480px;
+      background: rgba(16, 22, 19, 0.82);
+      border: 1px solid rgba(255, 209, 102, 0.28);
+      border-radius: 24px;
+      padding: 2.8rem 2.4rem;
+      box-shadow: 0 25px 60px rgba(0, 0, 0, 0.8), 0 0 35px rgba(11, 93, 70, 0.35);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      position: relative;
+    }
+
+    .auth-card::before {
+      content: '';
+      position: absolute;
+      inset: -1px;
+      border-radius: inherit;
+      padding: 1.5px;
+      background: linear-gradient(135deg, rgba(255, 209, 102, 0.4), rgba(11, 93, 70, 0.6), rgba(255, 122, 24, 0.4));
+      -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+      -webkit-mask-composite: xor;
+      mask-composite: exclude;
+      pointer-events: none;
+    }
+
+    .auth-header {
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+
+    .auth-header .logo-crest {
+      margin: 0 auto 1.2rem auto;
+    }
+
+    .auth-title {
+      font-family: var(--font-heading);
+      font-size: 1.6rem;
+      font-weight: 800;
+      color: #FFFFFF;
+      margin-bottom: 0.35rem;
+    }
+
+    .auth-subtitle {
+      font-size: 0.88rem;
+      color: var(--color-cream-muted);
+    }
+
+    .form-group {
+      margin-bottom: 1.4rem;
+    }
+
+    .form-label {
+      display: block;
+      font-size: 0.84rem;
+      font-weight: 600;
+      color: var(--color-cream);
+      margin-bottom: 0.5rem;
+    }
+
+    .form-input-wrapper {
+      position: relative;
+    }
+
+    .form-input {
+      width: 100%;
+      background: rgba(10, 15, 13, 0.7);
+      border: 1.5px solid rgba(255, 209, 102, 0.22);
+      border-radius: 12px;
+      padding: 0.85rem 1.1rem;
+      color: #FFFFFF;
+      font-size: 0.95rem;
+      transition: all var(--transition-fast);
+      outline: none;
+    }
+
+    .form-input:focus {
+      border-color: var(--color-gold);
+      box-shadow: 0 0 15px rgba(255, 209, 102, 0.25);
+      background: rgba(10, 15, 13, 0.95);
+    }
+
+    .form-row-between {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 0.82rem;
+      margin-bottom: 1.8rem;
+    }
+
+    .form-checkbox-label {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      color: var(--color-cream-muted);
+      cursor: pointer;
+    }
+
+    .forgot-link {
+      color: var(--color-gold);
+      text-decoration: underline;
+    }
+
+    .demo-login-box {
+      margin-top: 2rem;
+      padding-top: 1.5rem;
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .demo-login-box h5 {
+      font-size: 0.78rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--color-gold);
+      margin-bottom: 0.8rem;
+      text-align: center;
+    }
+
+    .demo-btn-group {
+      display: flex;
+      flex-direction: column;
+      gap: 0.6rem;
+    }
+
+    .btn-demo-quick {
+      background: rgba(11, 93, 70, 0.25);
+      border: 1px solid rgba(255, 209, 102, 0.2);
+      border-radius: 10px;
+      padding: 0.65rem 1rem;
+      color: var(--color-cream);
+      font-size: 0.82rem;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      transition: all var(--transition-fast);
+    }
+
+    .btn-demo-quick:hover {
+      background: rgba(11, 93, 70, 0.6);
+      border-color: var(--color-gold);
+      color: var(--color-gold);
+      transform: translateX(3px);
+    }
+
+    .back-home-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      color: var(--color-gold);
+      font-size: 0.9rem;
+      font-weight: 600;
+      margin-bottom: 2rem;
+      text-decoration: none;
+      transition: transform var(--transition-fast);
+    }
+
+    .back-home-link:hover {
+      transform: translateX(-4px);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Ambient background glow -->
+  <div class="ambient-glow glow-top-left" aria-hidden="true"></div>
+  <div class="ambient-glow glow-center-right" aria-hidden="true"></div>
+
+  <!-- Navbar Simple Header -->
+  <header class="navbar" id="navbar">
+    <div class="nav-container">
+      <a href="index.html" class="brand-logo" aria-label="G. Pulla Reddy Food Court Home">
+        <div class="logo-crest">
+          <svg class="crest-icon" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="20" cy="20" r="18" stroke="#FFD166" stroke-width="2" stroke-dasharray="4 2"/>
+            <path d="M12 24C12 20 15.58 17 20 17C24.42 17 28 20 28 24C28 26.2 24.42 27 20 27C15.58 27 12 26.2 12 24Z" fill="#FF7A18"/>
+            <circle cx="20" cy="8" r="2" fill="#FFD166"/>
+          </svg>
+        </div>
+        <div class="brand-text">
+          <span class="college-name">G. Pulla Reddy</span>
+          <span class="sub-name">Food Court <span class="badge-sqms">Portal</span></span>
+        </div>
+      </a>
+
+      <div class="nav-actions">
+        <a href="index.html" class="btn btn-outline-gold" style="padding: 0.5rem 1.1rem; font-size: 0.85rem;">
+          ← Back to Food Court
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <main class="auth-page">
+    <div class="auth-card">
+      
+      <a href="index.html" class="back-home-link">
+        <span>← Return to Main Page</span>
+      </a>
+
+      <div class="auth-header">
+        <div class="logo-crest">
+          <svg class="crest-icon" viewBox="0 0 40 40" fill="none">
+            <circle cx="20" cy="20" r="18" stroke="#FFD166" stroke-width="2"/>
+            <path d="M12 24C12 20 15.58 17 20 17C24.42 17 28 20 28 24C28 26.2 24.42 27 20 27C15.58 27 12 26.2 12 24Z" fill="#FF7A18"/>
+          </svg>
+        </div>
+        <h1 class="auth-title">Campus Food Court Login</h1>
+        <p class="auth-subtitle">G. Pulla Reddy Engineering College, Kurnool</p>
+      </div>
+
+      <form id="loginForm" onsubmit="handleLoginSubmit(event)">
+        
+        <div class="form-group">
+          <label class="form-label" for="collegeRoll">College Roll Number / Faculty ID</label>
+          <div class="form-input-wrapper">
+            <input 
+              type="text" 
+              id="collegeRoll" 
+              class="form-input" 
+              placeholder="e.g. 21GPR042 or FAC-CSE-09" 
+              required
+            >
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="userPassword">Campus Portal Password / PIN</label>
+          <div class="form-input-wrapper">
+            <input 
+              type="password" 
+              id="userPassword" 
+              class="form-input" 
+              placeholder="••••••••" 
+              required
+            >
+          </div>
+        </div>
+
+        <div class="form-row-between">
+          <label class="form-checkbox-label">
+            <input type="checkbox" checked>
+            <span>Remember session</span>
+          </label>
+          <a href="#" class="forgot-link" onclick="alert('Demo Mode: You can click any Quick Demo Login button below or type any credentials to test!')">Need Help?</a>
+        </div>
+
+        <button type="submit" class="btn btn-primary btn-block" style="padding: 0.9rem; font-size: 1rem;">
+          Sign In & Order Food →
+        </button>
+
+      </form>
+
+      <!-- Instant Demo Shortcuts -->
+      <div class="demo-login-box">
+        <h5>⚡ Instant Demo Sign-In (1-Click)</h5>
+        <div class="demo-btn-group">
+          <button type="button" class="btn-demo-quick" onclick="quickFill('22GPR108', 'G. Akhil (ECE Department)')">
+            <span>🎓 Student: <strong>22GPR108</strong> (G. Akhil)</span>
+            <span>Autofill →</span>
+          </button>
+          <button type="button" class="btn-demo-quick" onclick="quickFill('FAC-CSE-24', 'Dr. S. Reddy (CSE Dept)')">
+            <span>👨‍🏫 Faculty: <strong>FAC-CSE-24</strong></span>
+            <span>Autofill →</span>
+          </button>
+          <button type="button" class="btn-demo-quick" onclick="quickFill('GUEST-CAMPUS', 'Guest Visitor')">
+            <span>✨ Guest / Visitor Access</span>
+            <span>Autofill →</span>
+          </button>
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+  <script>
+    function quickFill(id, name) {
+      document.getElementById('collegeRoll').value = id;
+      document.getElementById('userPassword').value = 'canteen123';
+      sessionStorage.setItem('gpr_user', JSON.stringify({ id, name, role: 'Student' }));
+      setTimeout(() => {
+        alert(`Welcome, ${name}! Redirecting to Food Court Menu with verified student account.`);
+        window.location.href = 'index.html#menu';
+      }, 250);
+    }
+
+    function handleLoginSubmit(e) {
+      e.preventDefault();
+      const id = document.getElementById('collegeRoll').value.trim();
+      sessionStorage.setItem('gpr_user', JSON.stringify({ id, name: id, role: 'User' }));
+      alert(`Login Successful for ${id}! Taking you to the menu...`);
+      window.location.href = 'index.html#menu';
+    }
+  </script>
+</body>
+</html>

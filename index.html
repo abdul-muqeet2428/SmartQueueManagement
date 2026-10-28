@@ -1,0 +1,824 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>G. Pulla Reddy Food Court – Smart Queue Management System</title>
+  <meta name="description" content="Skip the queue and savor every bite at G. Pulla Reddy Food Court. Order authentic campus meals online, pay digitally, and track your food with personal digital tokens.">
+  
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  
+  <!-- Stylesheet -->
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- Ambient Glow Effects & Particle Background -->
+  <div class="ambient-glow glow-top-left" aria-hidden="true"></div>
+  <div class="ambient-glow glow-center-right" aria-hidden="true"></div>
+  <div class="ambient-glow glow-bottom-left" aria-hidden="true"></div>
+  <canvas id="particle-canvas" class="particle-canvas" aria-hidden="true"></canvas>
+
+  <!-- ==================== 1. NAVIGATION BAR ==================== -->
+  <header class="navbar" id="navbar">
+    <div class="nav-container">
+      
+      <!-- Logo Branding -->
+      <a href="#home" class="brand-logo" aria-label="G. Pulla Reddy Food Court Home">
+        <div class="logo-crest">
+          <svg class="crest-icon" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <circle cx="20" cy="20" r="18" stroke="url(#goldGrad)" stroke-width="2" stroke-dasharray="4 2"/>
+            <path d="M12 24C12 20 15.58 17 20 17C24.42 17 28 20 28 24C28 26.2 24.42 27 20 27C15.58 27 12 26.2 12 24Z" fill="url(#orangeGrad)"/>
+            <path d="M15 15C15 13 17 11 20 11C23 11 25 13 25 15" stroke="#FFD166" stroke-width="2" stroke-linecap="round"/>
+            <circle cx="20" cy="8" r="2" fill="#FF7A18"/>
+            <defs>
+              <linearGradient id="goldGrad" x1="0" y1="0" x2="40" y2="40" gradientUnits="userSpaceOnUse">
+                <stop stop-color="#FFD166"/>
+                <stop offset="1" stop-color="#FF7A18"/>
+              </linearGradient>
+              <linearGradient id="orangeGrad" x1="12" y1="17" x2="28" y2="27" gradientUnits="userSpaceOnUse">
+                <stop stop-color="#FF7A18"/>
+                <stop offset="1" stop-color="#FFD166"/>
+              </linearGradient>
+            </defs>
+          </svg>
+          <div class="crest-dot"></div>
+        </div>
+        <div class="brand-text">
+          <span class="college-name">G. Pulla Reddy</span>
+          <span class="sub-name">Food Court <span class="badge-sqms">Smart Queue</span></span>
+        </div>
+      </a>
+
+      <!-- Center Desktop Navigation Links -->
+      <nav class="nav-menu" id="nav-menu" aria-label="Main Navigation">
+        <ul class="nav-links">
+          <li><a href="#home" class="nav-link active">Home</a></li>
+          <li><a href="#menu" class="nav-link">Menu</a></li>
+          <li><a href="#how-it-works" class="nav-link">How It Works</a></li>
+          <li><a href="#live-queue" class="nav-link">Live Queue</a></li>
+          <li><a href="#contact" class="nav-link">Contact</a></li>
+        </ul>
+      </nav>
+
+      <!-- Right Action & Mobile Toggle -->
+      <div class="nav-actions">
+        <a href="login.html" class="btn-student-login" id="nav-login-btn">
+          <span class="login-pulse"></span>
+          <svg class="login-icon" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+            <path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd" />
+          </svg>
+          <span>Student Login</span>
+        </a>
+
+        <!-- Mobile Hamburger Toggle Button -->
+        <button class="hamburger-btn" id="hamburger-btn" aria-label="Toggle navigation menu" aria-expanded="false" aria-controls="mobile-drawer">
+          <span class="hamburger-line"></span>
+          <span class="hamburger-line"></span>
+          <span class="hamburger-line"></span>
+        </button>
+      </div>
+
+    </div>
+
+    <!-- Mobile Drawer Overlay -->
+    <div class="mobile-drawer" id="mobile-drawer" aria-hidden="true">
+      <div class="mobile-drawer-content">
+        <ul class="mobile-nav-links">
+          <li><a href="#home" class="mobile-nav-link">Home</a></li>
+          <li><a href="#menu" class="mobile-nav-link">Menu</a></li>
+          <li><a href="#how-it-works" class="mobile-nav-link">How It Works</a></li>
+          <li><a href="#live-queue" class="mobile-nav-link">Live Queue</a></li>
+          <li><a href="token.html" class="mobile-nav-link">Track Your Token</a></li>
+          <li><a href="#contact" class="mobile-nav-link">Contact Us</a></li>
+        </ul>
+        <div class="mobile-drawer-footer">
+          <a href="login.html" class="btn btn-primary btn-block">
+            <span>Student Portal Login →</span>
+          </a>
+          <p class="mobile-campus-tag">G. Pulla Reddy Engineering College, Kurnool</p>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- ==================== 2. HERO SECTION ==================== -->
+  <main>
+    <section class="hero-section" id="home">
+      <!-- Emerald gradient backdrop with luxury texture overlay -->
+      <div class="hero-bg-overlay" aria-hidden="true"></div>
+
+      <div class="hero-container">
+        
+        <!-- Hero Left: Content & CTAs -->
+        <div class="hero-content">
+          
+          <!-- Small Glowing Badge -->
+          <div class="hero-badge reveal-item" style="--delay: 0.1s">
+            <span class="badge-dot"></span>
+            <span class="badge-text">SMART CAMPUS FOOD EXPERIENCE</span>
+          </div>
+
+          <!-- Large Main Heading -->
+          <h1 class="hero-heading reveal-item" style="--delay: 0.2s">
+            Skip the Queue.<br>
+            <span class="glow-gradient-text">Savor Every Bite.</span>
+          </h1>
+
+          <!-- Subtitle -->
+          <p class="hero-description reveal-item" style="--delay: 0.3s">
+            Order your favourite campus meals online, pay digitally, and collect your food with your personal token. More taste, less waiting.
+          </p>
+
+          <!-- Small Status Badge -->
+          <div class="status-badge reveal-item" style="--delay: 0.4s">
+            <span class="status-icon">✦</span>
+            <span class="status-text">Fast. Fresh. Convenient.</span>
+            <span class="status-separator">•</span>
+            <span class="status-kitchen">🟢 Kitchen Live: 4-8 Min Prep</span>
+          </div>
+
+          <!-- 3. Glowing Call-to-Action Buttons -->
+          <div class="hero-cta-group reveal-item" style="--delay: 0.5s">
+            
+            <!-- Button 1: Order Food Now -->
+            <a href="login.html" class="cta-btn btn-order" id="hero-order-btn">
+              <span class="btn-glow-layer" aria-hidden="true"></span>
+              <span class="btn-content">
+                <span class="btn-label">Order Food Now</span>
+                <svg class="btn-icon" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                  <path fill-rule="evenodd" d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" clip-rule="evenodd"/>
+                </svg>
+              </span>
+            </a>
+
+            <!-- Button 2: Explore Menu -->
+            <a href="#menu" class="cta-btn btn-explore" id="hero-explore-btn">
+              <span class="btn-content">
+                <span class="btn-label">Explore Menu</span>
+                <span class="btn-emoji" aria-hidden="true">🍽️</span>
+              </span>
+            </a>
+
+            <!-- Button 3: Track Your Token -->
+            <a href="token.html" class="cta-btn btn-track" id="hero-track-btn">
+              <span class="btn-content">
+                <span class="btn-label">Track Your Token</span>
+                <span class="btn-emoji" aria-hidden="true">🎫</span>
+              </span>
+            </a>
+
+          </div>
+
+          <!-- 5. Quick Statistics -->
+          <div class="quick-stats-grid reveal-item" style="--delay: 0.6s">
+            
+            <div class="stat-card">
+              <div class="stat-icon-wrap" aria-hidden="true">
+                <span>🥗</span>
+              </div>
+              <div class="stat-info">
+                <div class="stat-title-row">
+                  <span class="stat-counter" data-count="100">100</span>
+                  <span class="stat-unit">%</span>
+                </div>
+                <div class="stat-label">Freshly Prepared</div>
+                <div class="stat-desc">Daily hot food & fresh ingredients</div>
+              </div>
+            </div>
+
+            <div class="stat-card">
+              <div class="stat-icon-wrap" aria-hidden="true">
+                <span>⚡</span>
+              </div>
+              <div class="stat-info">
+                <div class="stat-title-row">
+                  <span class="stat-counter" data-count="1">1</span>
+                  <span class="stat-unit">-Click</span>
+                </div>
+                <div class="stat-label">Digital Tokens</div>
+                <div class="stat-desc">Instant phone alerts & easy collection</div>
+              </div>
+            </div>
+
+            <div class="stat-card">
+              <div class="stat-icon-wrap" aria-hidden="true">
+                <span>⏱️</span>
+              </div>
+              <div class="stat-info">
+                <div class="stat-title-row">
+                  <span class="stat-counter" data-count="70">70</span>
+                  <span class="stat-unit">%</span>
+                </div>
+                <div class="stat-label">Less Waiting</div>
+                <div class="stat-desc">Smart campus queue automation</div>
+              </div>
+            </div>
+
+          </div>
+
+        </div>
+
+        <!-- Hero Right: 4. Floating Food Showcase -->
+        <div class="hero-showcase">
+          <div class="showcase-composition" id="foodShowcase">
+            
+            <!-- Central Golden Aura Ring -->
+            <div class="showcase-glow-ring" aria-hidden="true"></div>
+
+            <!-- Central Hero Dish: Crispy Masala Dosa -->
+            <div class="food-card food-card-center" data-tilt>
+              <div class="food-image-wrapper">
+                <img 
+                  src="https://images.unsplash.com/photo-1668236543090-82eba5ee5976?w=600&auto=format&fit=crop&q=80" 
+                  alt="Golden crispy masala dosa served with fresh coconut chutney and sambar" 
+                  class="food-img"
+                  loading="eager"
+                  onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1630383249896-424e482df921?w=600&auto=format&fit=crop&q=80';"
+                >
+                <div class="food-steam" aria-hidden="true">
+                  <span class="steam-vapour" style="--s: 1"></span>
+                  <span class="steam-vapour" style="--s: 2"></span>
+                  <span class="steam-vapour" style="--s: 3"></span>
+                </div>
+                <div class="food-badge-popular">
+                  <span>⭐ Chef's Pride</span>
+                </div>
+              </div>
+              <div class="food-meta">
+                <div class="food-name-row">
+                  <h3 class="food-title">Crispy Ghee Masala Dosa</h3>
+                  <span class="food-price">₹45</span>
+                </div>
+                <p class="food-notes">Golden roast, aloo masala, coconut & tomato chutneys</p>
+                <div class="food-prep-row">
+                  <span class="prep-pill">⏱️ 4-5 mins</span>
+                  <span class="counter-pill">Counter 1</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Satellite Food 1: Golden Samosas (Top Left) -->
+            <div class="food-card food-satellite satellite-samosa" data-tilt>
+              <div class="satellite-img-box">
+                <img 
+                  src="https://images.unsplash.com/photo-1601050690597-df0568f70950?w=400&auto=format&fit=crop&q=80" 
+                  alt="Crispy golden samosas with spicy potato filling" 
+                  class="satellite-img"
+                  loading="lazy"
+                  onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1589301760014-d929f3979dbc?w=400&auto=format&fit=crop&q=80';"
+                >
+                <span class="satellite-pill">Crispy & Hot</span>
+              </div>
+              <div class="satellite-info">
+                <h4>Golden Samosas</h4>
+                <div class="satellite-sub">
+                  <span class="sat-price">₹20 (2 pcs)</span>
+                  <span class="sat-time">⚡ Instant</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Satellite Food 2: Fluffy Puri with Curry (Bottom Left) -->
+            <div class="food-card food-satellite satellite-puri" data-tilt>
+              <div class="satellite-img-box">
+                <img 
+                  src="https://images.unsplash.com/photo-1626777552726-4a6b54c97e46?w=400&auto=format&fit=crop&q=80" 
+                  alt="Fluffy hot puris served with spicy potato curry" 
+                  class="satellite-img"
+                  loading="lazy"
+                  onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1546833999-b9f581a1996d?w=400&auto=format&fit=crop&q=80';"
+                >
+                <span class="satellite-pill">Morning Hit</span>
+              </div>
+              <div class="satellite-info">
+                <h4>Puri with Potato Bhaji</h4>
+                <div class="satellite-sub">
+                  <span class="sat-price">₹40</span>
+                  <span class="sat-time">⏱️ 3 mins</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Satellite Food 3: Rayalaseema Uggani & Bajji (Top Right) -->
+            <div class="food-card food-satellite satellite-uggani" data-tilt>
+              <div class="satellite-img-box">
+                <img 
+                  src="https://images.unsplash.com/photo-1626082927389-6cd097cdc6ec?w=400&auto=format&fit=crop&q=80" 
+                  alt="Rayalaseema special Uggani paired with crispy Mirchi Bajji" 
+                  class="satellite-img"
+                  loading="lazy"
+                  onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1601050690597-df0568f70950?w=400&auto=format&fit=crop&q=80';"
+                >
+                <span class="satellite-pill tag-kurnool">Kurnool Special</span>
+              </div>
+              <div class="satellite-info">
+                <h4>Uggani & Mirchi Bajji</h4>
+                <div class="satellite-sub">
+                  <span class="sat-price">₹35</span>
+                  <span class="sat-time">🔥 Campus Favorite</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Satellite Food 4: Traditional Filter Tea / Chai (Bottom Right) -->
+            <div class="food-card food-satellite satellite-chai" data-tilt>
+              <div class="satellite-img-box">
+                <img 
+                  src="https://images.unsplash.com/photo-1576092768241-dec231879fc3?w=400&auto=format&fit=crop&q=80" 
+                  alt="Aromatic hot cutting tea in traditional glass" 
+                  class="satellite-img"
+                  loading="lazy"
+                  onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1561336313-0bd5e0b27ec8?w=400&auto=format&fit=crop&q=80';"
+                >
+                <span class="satellite-pill">Aromatic</span>
+              </div>
+              <div class="satellite-info">
+                <h4>Special Cutting Chai</h4>
+                <div class="satellite-sub">
+                  <span class="sat-price">₹12</span>
+                  <span class="sat-time">☕ Fresh Brewed</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Micro Interactive Badge -->
+            <div class="live-counter-badge" aria-label="Current Live Orders in Kitchen">
+              <div class="pulse-indicator"></div>
+              <div class="counter-text">
+                <span class="counter-title">Kitchen Pace</span>
+                <span class="counter-value">⚡ Fast Dispatch • Counter Active</span>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ==================== 6. HOW IT WORKS SECTION ==================== -->
+    <section class="section how-it-works-section" id="how-it-works">
+      <div class="section-container">
+        
+        <div class="section-header">
+          <div class="section-tag">
+            <span class="tag-sparkle">✦</span>
+            <span>SMART ORDERING WORKFLOW</span>
+          </div>
+          <h2 class="section-title">How It Works</h2>
+          <p class="section-subtitle">
+            Say goodbye to lunch rush chaos. Spend your college break eating delicious meals instead of standing in long lines.
+          </p>
+        </div>
+
+        <div class="workflow-grid">
+          
+          <!-- Card 1: Choose Your Meal -->
+          <div class="glow-card workflow-card" data-step="1">
+            <div class="card-glow-border" aria-hidden="true"></div>
+            <div class="card-inner">
+              <div class="card-step-badge">
+                <span class="step-num">01</span>
+                <span class="step-indicator">Step One</span>
+              </div>
+              <div class="card-icon-container">
+                <div class="icon-orb orb-orange">
+                  <svg class="step-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <path d="M18 8h1a4 4 0 0 1 0 8h-1"></path>
+                    <path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"></path>
+                    <line x1="6" y1="1" x2="6" y2="4"></line>
+                    <line x1="10" y1="1" x2="10" y2="4"></line>
+                    <line x1="14" y1="1" x2="14" y2="4"></line>
+                  </svg>
+                </div>
+              </div>
+              <h3 class="card-title">Choose Your Meal</h3>
+              <p class="card-desc">
+                Explore the canteen menu from your phone or laptop. Browse daily hot specials, customize portions, and add food directly to your cart.
+              </p>
+              <div class="card-feature-pill">
+                <span class="pill-dot"></span>
+                <span>Live Menu & Kitchen Stocks</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Card 2: Pay Digitally -->
+          <div class="glow-card workflow-card" data-step="2">
+            <div class="card-glow-border" aria-hidden="true"></div>
+            <div class="card-inner">
+              <div class="card-step-badge">
+                <span class="step-num">02</span>
+                <span class="step-indicator">Step Two</span>
+              </div>
+              <div class="card-icon-container">
+                <div class="icon-orb orb-gold">
+                  <svg class="step-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <rect x="1" y="4" width="22" height="16" rx="2" ry="2"></rect>
+                    <line x1="1" y1="10" x2="23" y2="10"></line>
+                    <circle cx="6" cy="15" r="1.5"></circle>
+                    <path d="M10 15h4"></path>
+                  </svg>
+                </div>
+              </div>
+              <h3 class="card-title">Pay Digitally</h3>
+              <p class="card-desc">
+                Continue through the secure payment interface via UPI, QR, or campus student card. Clearly identifies verified simulated payments for testing.
+              </p>
+              <div class="card-feature-pill">
+                <span class="pill-dot"></span>
+                <span>Instant Digital Receipts</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Card 3: Collect with Your Token -->
+          <div class="glow-card workflow-card" data-step="3">
+            <div class="card-glow-border" aria-hidden="true"></div>
+            <div class="card-inner">
+              <div class="card-step-badge">
+                <span class="step-num">03</span>
+                <span class="step-indicator">Step Three</span>
+              </div>
+              <div class="card-icon-container">
+                <div class="icon-orb orb-emerald">
+                  <svg class="step-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <circle cx="12" cy="12" r="10"></circle>
+                    <polyline points="12 6 12 12 16 14"></polyline>
+                  </svg>
+                </div>
+              </div>
+              <h3 class="card-title">Collect with Your Token</h3>
+              <p class="card-desc">
+                Receive your digital token instantly on your device. Watch the live counter queue and walk up to pick up your tray the moment it is called!
+              </p>
+              <div class="card-feature-pill">
+                <span class="pill-dot"></span>
+                <span>Real-Time Counter Alerts</span>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Bottom Prompt -->
+        <div class="workflow-cta-banner">
+          <div class="banner-text">
+            <h4>Ready to test how fast it works?</h4>
+            <p>Generate a test token or browse live items right now.</p>
+          </div>
+          <div class="banner-actions">
+            <a href="token.html" class="btn btn-outline-gold">Track A Live Token</a>
+            <a href="#menu" class="btn btn-primary">Browse Food Menu</a>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ==================== MENU PREVIEW SECTION ==================== -->
+    <section class="section menu-section" id="menu">
+      <div class="section-container">
+        
+        <div class="section-header">
+          <div class="section-tag">
+            <span class="tag-sparkle">✦</span>
+            <span>CAMPUS DELICACIES</span>
+          </div>
+          <h2 class="section-title">Explore Our Canteen Menu</h2>
+          <p class="section-subtitle">
+            Prepared fresh every single morning by our master cooks. Pure ingredients, legendary taste.
+          </p>
+          
+          <!-- Category Filter Tabs -->
+          <div class="menu-tabs" role="tablist" aria-label="Food Menu Categories">
+            <button class="tab-btn active" data-category="all" role="tab" aria-selected="true">All Items</button>
+            <button class="tab-btn" data-category="specials" role="tab" aria-selected="false">Rayalaseema Specials</button>
+            <button class="tab-btn" data-category="tiffin" role="tab" aria-selected="false">Morning Tiffin</button>
+            <button class="tab-btn" data-category="snacks" role="tab" aria-selected="false">Evening Snacks</button>
+            <button class="tab-btn" data-category="drinks" role="tab" aria-selected="false">Chai & Drinks</button>
+          </div>
+        </div>
+
+        <!-- Menu Grid -->
+        <div class="menu-grid" id="menuGrid">
+          
+          <!-- Item 1: Masala Dosa -->
+          <div class="menu-card" data-category="tiffin">
+            <div class="menu-card-img-wrap">
+              <img src="https://images.unsplash.com/photo-1668236543090-82eba5ee5976?w=500&auto=format&fit=crop&q=80" alt="Crispy Masala Dosa" loading="lazy">
+              <span class="menu-tag">Bestseller</span>
+            </div>
+            <div class="menu-card-body">
+              <div class="menu-card-head">
+                <h3>Crispy Masala Dosa</h3>
+                <span class="item-price">₹45</span>
+              </div>
+              <p class="item-desc">Thin golden crepe served with spiced potato mash, coconut chutney, and piping hot sambar.</p>
+              <div class="menu-card-foot">
+                <span class="item-time">⏱️ 4-5 mins</span>
+                <button class="btn-quick-add" data-item="Crispy Masala Dosa" data-price="45" aria-label="Add Crispy Masala Dosa to quick order">
+                  <span>+ Quick Order</span>
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Item 2: Uggani Bajji -->
+          <div class="menu-card" data-category="specials">
+            <div class="menu-card-img-wrap">
+              <img src="https://images.unsplash.com/photo-1626082927389-6cd097cdc6ec?w=500&auto=format&fit=crop&q=80" alt="Kurnool Uggani with Mirchi Bajji" loading="lazy">
+              <span class="menu-tag tag-kurnool">Kurnool Signature</span>
+            </div>
+            <div class="menu-card-body">
+              <div class="menu-card-head">
+                <h3>Kurnool Uggani & Bajji</h3>
+                <span class="item-price">₹35</span>
+              </div>
+              <p class="item-desc">Authentic Rayalaseema puffed rice tempered with mustard, peanuts, onions, paired with 2 hot mirchi bajjis.</p>
+              <div class="menu-card-foot">
+                <span class="item-time">⚡ Ready Now</span>
+                <button class="btn-quick-add" data-item="Kurnool Uggani & Bajji" data-price="35" aria-label="Add Kurnool Uggani to quick order">
+                  <span>+ Quick Order</span>
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Item 3: Golden Samosas -->
+          <div class="menu-card" data-category="snacks">
+            <div class="menu-card-img-wrap">
+              <img src="https://images.unsplash.com/photo-1601050690597-df0568f70950?w=500&auto=format&fit=crop&q=80" alt="Golden Samosas" loading="lazy">
+              <span class="menu-tag">Crispy</span>
+            </div>
+            <div class="menu-card-body">
+              <div class="menu-card-head">
+                <h3>Golden Samosa (Plate)</h3>
+                <span class="item-price">₹20</span>
+              </div>
+              <p class="item-desc">Two pieces of flaky, golden pastry filled with fragrant spiced potatoes and green peas, served with tangy chutney.</p>
+              <div class="menu-card-foot">
+                <span class="item-time">⚡ Ready Now</span>
+                <button class="btn-quick-add" data-item="Golden Samosa" data-price="20" aria-label="Add Golden Samosa to quick order">
+                  <span>+ Quick Order</span>
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Item 4: Puri Masala -->
+          <div class="menu-card" data-category="tiffin">
+            <div class="menu-card-img-wrap">
+              <img src="https://images.unsplash.com/photo-1626777552726-4a6b54c97e46?w=500&auto=format&fit=crop&q=80" alt="Puri Bhaji" loading="lazy">
+              <span class="menu-tag">Fresh Daily</span>
+            </div>
+            <div class="menu-card-body">
+              <div class="menu-card-head">
+                <h3>Puri with Potato Bhaji</h3>
+                <span class="item-price">₹40</span>
+              </div>
+              <p class="item-desc">Three puffed golden puris straight from the oil, accompanied by our aromatic homestyle potato sagu.</p>
+              <div class="menu-card-foot">
+                <span class="item-time">⏱️ 3-4 mins</span>
+                <button class="btn-quick-add" data-item="Puri with Potato Bhaji" data-price="40" aria-label="Add Puri Bhaji to quick order">
+                  <span>+ Quick Order</span>
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Item 5: Mirchi Bajji Special -->
+          <div class="menu-card" data-category="specials">
+            <div class="menu-card-img-wrap">
+              <img src="https://images.unsplash.com/photo-1589301760014-d929f3979dbc?w=500&auto=format&fit=crop&q=80" alt="Stuffed Mirchi Bajji" loading="lazy">
+              <span class="menu-tag tag-kurnool">Rayalaseema Hot</span>
+            </div>
+            <div class="menu-card-body">
+              <div class="menu-card-head">
+                <h3>Stuffed Mirchi Bajji (3 Pcs)</h3>
+                <span class="item-price">₹30</span>
+              </div>
+              <p class="item-desc">Fresh green chilies stuffed with ajwain and lemon-tamarind masala, batter fried to crunchy perfection.</p>
+              <div class="menu-card-foot">
+                <span class="item-time">⏱️ 2 mins</span>
+                <button class="btn-quick-add" data-item="Stuffed Mirchi Bajji" data-price="30" aria-label="Add Stuffed Mirchi Bajji to quick order">
+                  <span>+ Quick Order</span>
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Item 6: Special Cutting Chai -->
+          <div class="menu-card" data-category="drinks">
+            <div class="menu-card-img-wrap">
+              <img src="https://images.unsplash.com/photo-1576092768241-dec231879fc3?w=500&auto=format&fit=crop&q=80" alt="Special Cutting Chai" loading="lazy">
+              <span class="menu-tag">All Day Hot</span>
+            </div>
+            <div class="menu-card-body">
+              <div class="menu-card-head">
+                <h3>Special Cutting Chai</h3>
+                <span class="item-price">₹12</span>
+              </div>
+              <p class="item-desc">Slow-boiled strong milk tea infused with crushed ginger and cardamom. The ultimate study fuel.</p>
+              <div class="menu-card-foot">
+                <span class="item-time">⚡ Counter Ready</span>
+                <button class="btn-quick-add" data-item="Special Cutting Chai" data-price="12" aria-label="Add Special Cutting Chai to quick order">
+                  <span>+ Quick Order</span>
+                </button>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ==================== LIVE QUEUE BOARD SIMULATOR ==================== -->
+    <section class="section queue-board-section" id="live-queue">
+      <div class="section-container">
+        
+        <div class="section-header">
+          <div class="section-tag">
+            <span class="tag-sparkle">✦</span>
+            <span>REAL-TIME CANTEEN STATUS</span>
+          </div>
+          <h2 class="section-title">Live Food Court Queue Display</h2>
+          <p class="section-subtitle">
+            Synchronized with kitchen order displays. Watch for your token number and collect without hassle.
+          </p>
+        </div>
+
+        <div class="queue-board-display">
+          
+          <!-- Board Columns -->
+          <div class="queue-columns-grid">
+            
+            <!-- Serving Now Column -->
+            <div class="queue-col col-ready">
+              <div class="col-header">
+                <span class="status-indicator-dot ready-dot"></span>
+                <h3>Ready for Pickup (Now Serving)</h3>
+              </div>
+              <div class="token-pills-list" id="readyTokensList">
+                <div class="token-pill pill-ready pulse-ready">
+                  <span class="token-id">#A-104</span>
+                  <span class="token-counter">Counter 1 (Tiffins)</span>
+                </div>
+                <div class="token-pill pill-ready pulse-ready">
+                  <span class="token-id">#B-212</span>
+                  <span class="token-counter">Counter 2 (Snacks)</span>
+                </div>
+                <div class="token-pill pill-ready">
+                  <span class="token-id">#C-089</span>
+                  <span class="token-counter">Counter 3 (Chai)</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- In Preparation Column -->
+            <div class="queue-col col-cooking">
+              <div class="col-header">
+                <span class="status-indicator-dot cooking-dot"></span>
+                <h3>Cooking in Kitchen</h3>
+              </div>
+              <div class="token-pills-list" id="cookingTokensList">
+                <div class="token-pill pill-cooking">
+                  <span class="token-id">#A-105</span>
+                  <span class="token-counter">Est: 2 mins</span>
+                </div>
+                <div class="token-pill pill-cooking">
+                  <span class="token-id">#A-106</span>
+                  <span class="token-counter">Est: 4 mins</span>
+                </div>
+                <div class="token-pill pill-cooking">
+                  <span class="token-id">#B-214</span>
+                  <span class="token-counter">Est: 3 mins</span>
+                </div>
+              </div>
+            </div>
+
+          </div>
+
+          <!-- Quick Token Check Widget -->
+          <div class="quick-token-checker">
+            <div class="checker-left">
+              <h4>Have an active order token?</h4>
+              <p>Type your token number to check its instant stage.</p>
+            </div>
+            <form class="checker-form" id="quickCheckForm" onsubmit="event.preventDefault(); window.quickCheckToken();">
+              <input type="text" id="tokenQueryInput" placeholder="e.g. A-105" aria-label="Enter Token Number" required>
+              <button type="submit" class="btn btn-primary">Check Status</button>
+            </form>
+          </div>
+
+          <div id="checkResultBox" class="check-result-box" style="display: none;" role="status">
+            <!-- Injected via JavaScript -->
+          </div>
+
+        </div>
+
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ==================== 9. FOOTER ==================== -->
+  <footer class="footer" id="contact">
+    <div class="footer-container">
+      
+      <div class="footer-main-grid">
+        
+        <!-- Brand & Tagline Col -->
+        <div class="footer-brand-col">
+          <div class="footer-brand-row">
+            <div class="logo-crest">
+              <svg class="crest-icon" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                <circle cx="20" cy="20" r="18" stroke="#FFD166" stroke-width="2" stroke-dasharray="4 2"/>
+                <path d="M12 24C12 20 15.58 17 20 17C24.42 17 28 20 28 24C28 26.2 24.42 27 20 27C15.58 27 12 26.2 12 24Z" fill="#FF7A18"/>
+                <circle cx="20" cy="8" r="2" fill="#FFD166"/>
+              </svg>
+            </div>
+            <div class="brand-text">
+              <span class="college-name">G. Pulla Reddy</span>
+              <span class="sub-name">Food Court</span>
+            </div>
+          </div>
+          <p class="footer-system-title">Smart Queue Management System</p>
+          <p class="footer-tagline">“Good Food. Smart Queues. Happier Breaks.”</p>
+          <div class="campus-address">
+            <p>📍 G. Pulla Reddy Engineering College (Autonomous)</p>
+            <p>G. Pulla Reddy Nagar, Nandyal Road, Kurnool, A.P. - 518007</p>
+          </div>
+        </div>
+
+        <!-- Quick Links -->
+        <div class="footer-links-col">
+          <h4>Navigation</h4>
+          <ul class="footer-links">
+            <li><a href="#home">Home</a></li>
+            <li><a href="#menu">Food Court Menu</a></li>
+            <li><a href="#how-it-works">How It Works</a></li>
+            <li><a href="#live-queue">Live Queue Status</a></li>
+            <li><a href="token.html">Track Your Token</a></li>
+            <li><a href="login.html">Student & Faculty Portal</a></li>
+          </ul>
+        </div>
+
+        <!-- Timings & Counters -->
+        <div class="footer-links-col">
+          <h4>Food Court Timings</h4>
+          <ul class="footer-timings">
+            <li><span>Morning Tiffin:</span> <strong>7:45 AM – 11:00 AM</strong></li>
+            <li><span>Lunch Rush:</span> <strong>12:15 PM – 2:30 PM</strong></li>
+            <li><span>Evening Snacks & Chai:</span> <strong>3:45 PM – 7:30 PM</strong></li>
+            <li><span>Sundays & Holidays:</span> <strong>Closed</strong></li>
+          </ul>
+          <div class="footer-kitchen-indicator">
+            <span class="pulse-indicator"></span>
+            <span>Online Token System Active</span>
+          </div>
+        </div>
+
+        <!-- Contact & Student Support -->
+        <div class="footer-links-col">
+          <h4>Campus Support</h4>
+          <p class="footer-info-text">Need assistance with your meal token, digital wallet, or canteen suggestions?</p>
+          <ul class="footer-contact-list">
+            <li><span>📧</span> canteen-support@gprec.ac.in</li>
+            <li><span>📞</span> +91 (08518) 270957</li>
+            <li><span>🏢</span> Canteen Ground Floor, Near Student Amenities Block</li>
+          </ul>
+        </div>
+
+      </div>
+
+      <div class="footer-bottom-bar">
+        <div class="bottom-copy">
+          <p>© 2026 G. Pulla Reddy Engineering College Food Court. All rights reserved.</p>
+        </div>
+        <div class="bottom-disclaimer">
+          <p>Smart Queue Management System • Developed for Fast, Fresh, and Convenient Campus Dining.</p>
+        </div>
+      </div>
+
+    </div>
+  </footer>
+
+  <!-- Floating Toast Notification for Interactive Demos -->
+  <div id="toastNotification" class="toast-notification" role="alert" aria-live="polite">
+    <div class="toast-icon">✨</div>
+    <div class="toast-body">
+      <h5 id="toastTitle">Order Updated</h5>
+      <p id="toastMessage">Item added to your quick tray!</p>
+    </div>
+  </div>
+
+  <!-- JavaScript -->
+  <script src="script.js"></script>
+</body>
+</html>
